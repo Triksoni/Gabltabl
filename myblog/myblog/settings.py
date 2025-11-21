@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-c#$t3v6@#x=5e+b0^0m4c!@g@u_x$5@har=cs@om5kj9@!l=bx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://gabltabl.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['https://gabltabl.onrender.com', 'localhost', '127.0.0.1', 'gabltabl.onrender.com']
 
 
 # Application definition
