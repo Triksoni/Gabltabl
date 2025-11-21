@@ -1,0 +1,98 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Поиск людей - Мой Блог{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'post_list' %}">Главная</a></li>
+                <li class="breadcrumb-item active">Поиск людей</li>
+            </ol>
+        </nav>
+
+        <h1 class="mb-4">Поиск людей</h1>
+        
+        <!-- Форма поиска -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-8">
+                        <input type="text" name="q" class="form-control" placeholder="Введите имя пользователя, имя или фамилию..." 
+                               value="{{ query }}">
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">Найти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if query %}
+            <div class="alert alert-info mb-4">
+                Результаты поиска по запросу "<strong>{{ query }}</strong>"
+            </div>
+        {% endif %}
+
+        {% if users %}
+            <div class="row">
+                {% for user in users %}
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body text-center">
+                                <div class="mb-3">
+                                    {% if user.userprofile.avatar %}
+                                        <img src="{{ user.userprofile.avatar.url }}" alt="Аватар" 
+                                             class="rounded-circle" width="80" height="80">
+                                    {% else %}
+                                        <div class="bg-secondary rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                             style="width: 80px; height: 80px;">
+                                            <span class="text-white fs-4">{{ user.username|first|upper }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <h5 class="card-title">
+                                    <a href="{% url 'user_profile' username=user.username %}" class="text-decoration-none">
+                                        {{ user.username }}
+                                    </a>
+                                </h5>
+                                {% if user.first_name or user.last_name %}
+                                    <p class="text-muted mb-2">{{ user.first_name }} {{ user.last_name }}</p>
+                                {% endif %}
+                                
+                                <div class="user-stats mb-3">
+                                    <small class="text-muted">
+                                        <strong>Постов:</strong> {{ user.post_set.count }}<br>
+                                        <strong>На сайте с:</strong> {{ user.date_joined|date:"d M Y" }}
+                                    </small>
+                                </div>
+                                
+                                {% if user.userprofile.bio %}
+                                    <p class="card-text small text-muted">
+                                        {{ user.userprofile.bio|truncatewords:15 }}
+                                    </p>
+                                {% endif %}
+                                
+                                <a href="{% url 'user_profile' username=user.username %}" class="btn btn-primary btn-sm">
+                                    Посмотреть профиль
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% elif query %}
+            <div class="alert alert-warning text-center py-5">
+                <h4>Пользователи не найдены</h4>
+                <p>Попробуйте изменить поисковый запрос</p>
+            </div>
+        {% else %}
+            <div class="alert alert-info text-center py-5">
+                <h4>Найдите интересных людей</h4>
+                <p>Введите имя пользователя, имя или фамилию в поле поиска выше</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
